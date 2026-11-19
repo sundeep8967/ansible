@@ -139,13 +139,10 @@ def _run_module(jid, *module_args):
     # by the connection being closed sending a signal to the job group
     try:
         ipc_notifier.send(True)
-    except (BrokenPipeError, OSError) as ex:
+    except OSError as ex:
         notice(f"ipc_notifier.send failed (grandparent exited): {ex}")
     finally:
-        try:
-            ipc_notifier.close()
-        except (BrokenPipeError, OSError):
-            pass
+        ipc_notifier.close()
 
     outdata = ''
     filtered_outdata = ''
